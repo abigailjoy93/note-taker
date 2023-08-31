@@ -182,17 +182,5 @@ if (window.location.pathname === "/notes") {
 
 getAndRenderNotes();
 
-if (title && text) {
-  const response = await fetch("/api/notes", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ title, text }),
-  });
-
-  getAndRenderNotes();
-}
-
 // Attach event listener
 document.querySelector(".save-note").addEventListener("click", saveNote);
