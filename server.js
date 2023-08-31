@@ -25,7 +25,7 @@ app.post("/api/notes", (req, res) => {
     res.json(newNote);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send(`Internal Server Error`);
   }
 });
 
