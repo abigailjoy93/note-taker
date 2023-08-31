@@ -1,19 +1,10 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid"); // To generate unique IDs
 
-app.get("/", (req, res) => {
-  res.send("Hello Express!");
-});
-
-app.listen(port, () => {
-  console.log("Server is running on port {port}");
-});
-
-app.get("/notes", (req, res) => {
+app.get("/api/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
@@ -23,9 +14,14 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  const newNote = req.body;
-  const notes = JSON.parse(fs.readFileSync("develop/db/db.json", "utf8"));
-  notes.push(newNote)
+  try {
+    const newNote = req.body;
+    const notes = JSON.parse(fs.readFileSync("develop/db/db.json", "utf8"));
+    notes.push(newNote);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Default route for any other request
@@ -58,9 +54,6 @@ async function saveNote() {
   }
 }
 
-// Attach event listeners
-document.querySelector(".save-note").addEventListener("click", saveNote);
-
 // Serve the notes.html file when the /notes route is accessed
 app.get("/notes", (req, res) => {
   res.sendFile(path.join(__dirname, "public/notes.html"));
@@ -72,6 +65,8 @@ app.get("*", (req, res) => {
 });
 
 // API endpoint to get existing notes
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get("/api/notes", (req, res) => {
   const notes = JSON.parse(fs.readFileSync("develop/db/db.json", "utf8"));
   res.json(notes);
