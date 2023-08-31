@@ -6,20 +6,23 @@ const { v4: uuidv4 } = require("uuid"); // To generate unique IDs
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 const notesFilePath = path.join(__dirname, "db/db.json");
 
 app.get("/api/notes", (req, res) => {
-  const notes = JSON.parse(fs.readFileSync("db/db.json", "utf8"));
+  const notes = JSON.parse(fs.readFileSync(notesFilePath, "utf8"));
   res.json(notes);
 });
 
 app.post("/api/notes", (req, res) => {
   try {
     const newNote = req.body;
-    const notes = JSON.parse(fs.readFileSync("db/db.json", "utf8"));
+    const notes = JSON.parse(fs.readFileSync(notesFilePath, "utf8"));
+    newNote.id = uuid4();
     notes.push(newNote);
+    fs.writeFileSync(notesFilePath, JSON.stringify(notes));
+    res.json(newNote);
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -76,9 +79,6 @@ app.get("/notes", (req, res) => {
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
-
-// API endpoint to get existing notes
-app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/api/notes", (req, res) => {
   const notes = JSON.parse(fs.readFileSync("db/db.json", "utf8"));

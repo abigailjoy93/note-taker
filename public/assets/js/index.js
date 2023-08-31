@@ -184,7 +184,7 @@ getAndRenderNotes();
 
 // Fetch existing notes and render them
 async function getAndRenderNotes() {
-  const response = await fetch("api/notes");
+  const response = await fetch("/api/notes");
   const notes = await response.json();
   // Render the notes in the left column
 }
