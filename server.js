@@ -4,9 +4,9 @@ const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid"); // To generate unique IDs
 
-app.get("/api/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/notes.html"));
-});
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/api/notes", (req, res) => {
   const notes = JSON.parse(fs.readFileSync("develop/db/db.json", "utf8"));
@@ -35,6 +35,8 @@ async function getAndRenderNotes() {
   const notes = await response.json();
   // Render the notes in the left column
 }
+
+getAndRenderNotes();
 
 // Save a new note
 async function saveNote() {
