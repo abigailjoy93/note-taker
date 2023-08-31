@@ -182,22 +182,16 @@ if (window.location.pathname === "/notes") {
 
 getAndRenderNotes();
 
-// Saves a new note
-async function saveNote() {
-  const title = document.querySelector(".note-title").value;
-  const text = document.querySelector(".note-textarea").value;
+if (title && text) {
+  const response = await fetch("/api/notes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, text }),
+  });
 
-  if (title && text) {
-    const response = await fetch("/api/notes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, text }),
-    });
-
-    getAndRenderNotes();
-  }
+  getAndRenderNotes();
 }
 
 // Attach event listener
