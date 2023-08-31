@@ -180,8 +180,6 @@ if (window.location.pathname === "/notes") {
   noteText.addEventListener("keyup", handleRenderSaveBtn);
 }
 
-getAndRenderNotes();
-
 // Fetch existing notes and render them
 async function getAndRenderNotes() {
   const response = await fetch("/api/notes");
