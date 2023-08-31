@@ -26,6 +26,7 @@ app.post("/api/notes", (req, res) => {
   const newNote = req.body;
   const notes = JSON.parse(fs.readFileSync("develop/db/db.json", "utf8"));
   notes.push(newNote)
+});
 
 // Default route for any other request
 app.get("*", (req, res) => {
